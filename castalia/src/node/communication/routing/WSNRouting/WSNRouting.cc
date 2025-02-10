@@ -13,7 +13,12 @@ void WSNRouting::startup(){
                 throw cRuntimeError("\nMultiPathRings routing has to be used with an application that defines the parameter isSink");
             if (isSink){
                 // broadcast
-                WSNRoutingPacket *setupPkt = new WSNRoutingPacket("BCAST pkt", NETWORK_LAYER_PACKET);
+                sendBroadcast();
+            }
+}
+
+void WSNRouting::sendBroadcast(){
+	WSNRoutingPacket *setupPkt = new WSNRoutingPacket("BCAST pkt", NETWORK_LAYER_PACKET);
                 trace() << "This node is sink: " << SELF_NETWORK_ADDRESS;
                 char* clusters[10] = {"12", "56", "71", "90"};
                 for (int i=0; i<4; i++){
@@ -27,12 +32,11 @@ void WSNRouting::startup(){
                 setupPkt->setOrigin(SELF_NETWORK_ADDRESS);
                 setupPkt->setDestination(BROADCAST_NETWORK_ADDRESS);
                 toMacLayer(setupPkt, BROADCAST_MAC_ADDRESS);
-            }
 }
 
 void WSNRouting::fromApplicationLayer(cPacket * pkt, const char *destination)
 {
-
+	// nothing here
 }
 
 void WSNRouting::fromMacLayer(cPacket * pkt, int srcMacAddress, double rssi, double lqi)
